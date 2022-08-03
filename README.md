@@ -14,18 +14,18 @@ npx hardhat run --network rinkeby dev-scripts/deploy.js
 npx hardhat run --network ethereum scripts/deploy.js
 
 ## setup forge test
-install usbmodule
-`git submodule add URL`
-install submodules
-`git submodule update --init`
-install cargo
-`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs/ | sh`
-run test with specific network
-`forge test -f https://rpc.api.moonbase.moonbeam.network -vvv --force`
-run specific test
-`forge test --match-contract IFOTest`
-run gas costs
-`forge test --gas-report`
+install usbmodule<br />
+`git submodule add URL`<br />
+install submodules<br />
+`git submodule update --init`<br />
+install cargo<br />
+`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs/ | sh`<br />
+run test with specific network<br />
+`forge test -f https://rpc.api.moonbase.moonbeam.network -vvv --force`<br />
+run specific test<br />
+`forge test --match-contract IFOTest`<br />
+run gas costs<br />
+`forge test --gas-report`<br />
 
 ## setup seed data / subgraph
 -run yarn install and forge install and whatever else to setup project
