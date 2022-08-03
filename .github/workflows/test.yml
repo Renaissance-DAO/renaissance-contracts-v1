@@ -1,0 +1,29 @@
+name: Tests and Gas Report
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  check:
+    name: Foundry project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: onbjerg/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install dependencies
+        run: forge install
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Run tests with fuzzing
+        run: FOUNDRY_PROFILE=CI forge test --gas-report
