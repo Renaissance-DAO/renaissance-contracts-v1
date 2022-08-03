@@ -254,7 +254,7 @@ contract LPStaking is ILPStaking, Pausable {
         // This method relies on extcodesize, which returns 0 for contracts in
         // construction, since the code is only stored at the end of the
         // constructor execution.
-        return account.code.length != 0;
+        return account.code.length > 0;
     }
 
     function _withdraw(StakingPool memory pool, uint256 amount, address account) internal {
