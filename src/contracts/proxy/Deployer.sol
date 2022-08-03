@@ -61,17 +61,13 @@ contract Deployer is Ownable {
     /// @param _logic the implementation
     function deployVaultManager(
         address _logic,
-        address _weth,
-        address _ifoFactory,
-        address _priceOracle
+        address _weth
     ) external onlyOwner returns (address vaultManager) {
         if (address(proxyController) == address(0)) revert NoController();
 
         bytes memory _initializationCalldata = abi.encodeWithSelector(
             VaultManager.__VaultManager_init.selector,
-            _weth,
-            _ifoFactory,
-            _priceOracle
+            _weth
         );
 
         vaultManager = address(new AdminUpgradeabilityProxy(_logic, msg.sender, _initializationCalldata));

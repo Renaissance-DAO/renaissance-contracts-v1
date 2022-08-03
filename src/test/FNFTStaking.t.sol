@@ -22,16 +22,14 @@ contract FNFTStakingTest is DSTest, SetupEnvironment {
 
   function setUp() public {
     setupEnvironment(10 ether);
-    (   ,
-        ,
-        ,
-        ,
-        ,
+    (
         ,
         vaultManager,
         ,
-        fnftCollectionFactory,
-        fnftStaking
+        ,
+        fnftStaking,
+        ,
+        fnftCollectionFactory
     ) = setupContracts();
 
     token = new SimpleMockNFT();

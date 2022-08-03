@@ -34,15 +34,14 @@ contract LPStakingTest is DSTest, SetupEnvironment {
 
   function setUp() public {
     setupEnvironment(10 ether);
-    (   stakingTokenProvider,
+    (
+        ,
+        vaultManager,
+        stakingTokenProvider,
         lpStaking,
         ,
-        ,
-        ,
         feeDistributor,
-        vaultManager,
-        ,
-        fnftCollectionFactory,
+        fnftCollectionFactory
     ) = setupContracts();
 
     uniswapV2Factory = setupPairFactory();

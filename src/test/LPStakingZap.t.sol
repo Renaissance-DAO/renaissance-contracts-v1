@@ -18,16 +18,16 @@ contract LPStakingZapTest is DSTest, SetupEnvironment {
 
     function setUp() public {
         setupEnvironment(10 ether);
-        (   ,
-            lpStaking,
+        (
             ,
-            ,
-            ,
-            feeDistributor,
             vaultManager,
             ,
+            lpStaking,
             ,
+            feeDistributor,
+
         ) = setupContracts();
+
         router = setupRouter();
         lpStakingZap = new LPStakingZap(address(vaultManager), address(router));
     }
