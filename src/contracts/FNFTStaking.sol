@@ -175,11 +175,7 @@ contract FNFTStaking is IFNFTStaking, Pausable, BeaconUpgradeable {
         // This method relies on extcodesize, which returns 0 for contracts in
         // construction, since the code is only stored at the end of the
         // constructor execution.
-
-        uint256 size;
-        // solhint-disable-next-line no-inline-assembly
-        assembly { size := extcodesize(account) }
-        return size != 0;
+        return account.code.length > 0;
     }
 
     function _timelockMintFor(uint256 vaultId, address account, uint256 _amount, uint256 timelockLength) internal returns (IERC20Upgradeable, FNFTStakingXTokenUpgradeable, uint256) {
