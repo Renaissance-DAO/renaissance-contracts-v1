@@ -33,10 +33,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     deployerInfo.abi,
     signer
   );
-  await deployerContract.deployFNFTStaking(
+  const deployFNFTStakingTx = await deployerContract.deployFNFTStaking(
     inventoryStakingImpl.address,
     vaultManagerAddress
   );
+  await deployFNFTStakingTx.wait();
 };
 
 func.tags = ['main', 'local', 'seed'];

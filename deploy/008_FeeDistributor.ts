@@ -39,12 +39,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     deployerInfo.abi,
     signer
   );
-  await deployerContract.deployFeeDistributor(
+  const deployFeeDistributorTx = await deployerContract.deployFeeDistributor(
     feeDistributorImpl.address,
     vaultManagerAddress,
     lpStakingAddress,
     TREASURY
   );
+  await deployFeeDistributorTx.wait();
 };
 
 func.tags = ['main', 'local', 'seed'];

@@ -37,11 +37,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     deployerInfo.abi,
     signer
   );
-  await deployerContract.deployLPStaking(
+  const deployLPStakingTx = await deployerContract.deployLPStaking(
     lpStakingImpl.address,
     vaultManagerAddress,
     stakingTokenProviderAddress
   );
+  await deployLPStakingTx.wait();
 };
 
 func.tags = ['main', 'local', 'seed'];

@@ -38,12 +38,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     deployerInfo.abi,
     signer
   );
-  await deployerContract.deployFNFTCollectionFactory(
+  const deployFNFTCollectionFactoryTx = await deployerContract.deployFNFTCollectionFactory(
     fnftCollectionFactoryImpl.address,
     vaultManagerAddress,
     fnftCollectionImpl.address
   );
-
+  await deployFNFTCollectionFactoryTx.wait();
 };
 
 func.tags = ['main', 'local', 'seed'];

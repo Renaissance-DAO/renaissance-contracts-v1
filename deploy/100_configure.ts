@@ -38,8 +38,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   );
 
   // 3. setup variables in vaultManager
-  await vaultManager.setFNFTCollectionFactory(fnftCollectionFactoryAddress);
-  await vaultManager.setFeeDistributor(feeDistributorAddress);
+  const setFNFTCollectionFactoryTx = await vaultManager.setFNFTCollectionFactory(fnftCollectionFactoryAddress);
+  await setFNFTCollectionFactoryTx.wait();
+  const setFeeDistributorTx = await vaultManager.setFeeDistributor(feeDistributorAddress);
+  await setFeeDistributorTx.wait();
 
   // finally, print all proxy addresses
   console.log("Proxy contracts:");

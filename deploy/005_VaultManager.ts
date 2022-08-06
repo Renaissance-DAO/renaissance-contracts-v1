@@ -31,11 +31,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     deployerInfo.abi,
     signer
   );
-  await deployerContract.deployVaultManager(
+  const deployVaultManager = await deployerContract.deployVaultManager(
     vaultManagerImpl.address,
     WETH
   );
 
+  await deployVaultManager.wait();
 };
 func.tags = ['main', 'local', 'seed'];
 export default func;

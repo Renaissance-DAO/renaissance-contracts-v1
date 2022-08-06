@@ -33,7 +33,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft1 = await ethers.getContractAt(nft1Info.abi, nft1Info.address);
-  await nft1.setBaseURI("ipfs://QmVTuf8VqSjJ6ma6ykTJiuVtvAY9CHJiJnXsgSMf5rBRtZ/");
+  const setBaseURITx1 = await nft1.setBaseURI("ipfs://QmVTuf8VqSjJ6ma6ykTJiuVtvAY9CHJiJnXsgSMf5rBRtZ/");
+  await setBaseURITx1.wait();
 
   // NFT2
   const nft2Info = await deploy("StandardMockNFT", {
@@ -43,7 +44,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft2 = await ethers.getContractAt(nft2Info.abi, nft2Info.address);
-  await nft2.setBaseURI("https://www.timelinetransit.xyz/metadata/");
+  const setBaseURITx2 = await nft2.setBaseURI("https://www.timelinetransit.xyz/metadata/");
+  await setBaseURITx2.wait();
 
   // NFT3
   const nft3Info = await deploy("StandardMockNFT", {
@@ -53,7 +55,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft3 = await ethers.getContractAt(nft3Info.abi, nft3Info.address);
-  await nft3.setBaseURI("ipfs://bafybeie7oivvuqcmhjzvxbiezyz7sr4fxkcrutewmaoathfsvcwksqiyuy/");
+  const setBaseURITx3 = await nft3.setBaseURI("ipfs://bafybeie7oivvuqcmhjzvxbiezyz7sr4fxkcrutewmaoathfsvcwksqiyuy/");
+  await setBaseURITx3.wait();
 
   // NFT4
   const nft4Info = await deploy("StandardMockNFT", {
@@ -63,7 +66,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft4 = await ethers.getContractAt(nft4Info.abi, nft4Info.address);
-  await nft4.setBaseURI("https://cdn.childrenofukiyo.com/metadata/");
+  const setBaseURITx4 = await nft4.setBaseURI("https://cdn.childrenofukiyo.com/metadata/");
+  await setBaseURITx4.wait();
 
   // NFT5
   const nft5Info = await deploy("StandardMockNFT", {
@@ -73,9 +77,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft5 = await ethers.getContractAt(nft5Info.abi, nft5Info.address);
-  await nft5.setBaseURI(
+  const setBaseURITx5 = await nft5.setBaseURI(
     "https://chainbase-api.matrixlabs.org/metadata/api/v1/apps/ethereum:mainnet:bKPQsA_Ohnj1Ug0MvX39i/contracts/0x249aeAa7fA06a63Ea5389b72217476db881294df_ethereum/metadata/tokens/"
   );
+  await setBaseURITx5.wait();
 
   // NFT6 (No TokenURI)
   const nft6Info = await deploy("NoURIMockNFT", {
@@ -94,7 +99,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft7 = await ethers.getContractAt(nft7Info.abi, nft7Info.address);
-  await nft7.setBaseURI("https://loremnft.com/nft/token/");
+  const setBaseURITx7 = await nft7.setBaseURI("https://loremnft.com/nft/token/");
+  await setBaseURITx7.wait();
 
   // NFT8
   const nft8Info = await deploy("StandardMockNFT", {
@@ -104,7 +110,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft8 = await ethers.getContractAt(nft8Info.abi, nft8Info.address);
-  await nft8.setBaseURI("ipfs://QmQNdnPx1K6a8jd5XJEJvGorx73U9pmpqU2YAhEfQZDwcw/");
+  const setBaseURITx8 = await nft8.setBaseURI("ipfs://QmQNdnPx1K6a8jd5XJEJvGorx73U9pmpqU2YAhEfQZDwcw/");
+  await setBaseURITx8.wait();
 
   // NFT9
   const nft9Info = await deploy("StandardMockNFT", {
@@ -114,7 +121,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft9 = await ethers.getContractAt(nft9Info.abi, nft9Info.address);
-  await nft9.setBaseURI("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/");
+  const setBaseURITx9 = await nft9.setBaseURI("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/");
+  await setBaseURITx9.wait();
 
   // NFT10
   const nft10Info = await deploy("StandardMockNFT", {
@@ -124,9 +132,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft10 = await ethers.getContractAt(nft10Info.abi, nft10Info.address);
-  await nft10.setBaseURI(
+  const setBaseURITx10 = await nft10.setBaseURI(
     "https://metadata.buildship.xyz/api/dummy-metadata-for/bafybeifuibkffbtlu4ttpb6c3tiyhezxoarxop5nuhr3ht3mdb7puumr2q/"
   );
+  await setBaseURITx10.wait();
 
   // NFT11
   const nft11Info = await deploy("StandardMockNFT", {
@@ -136,7 +145,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft11 = await ethers.getContractAt(nft11Info.abi, nft11Info.address);
-  await nft11.setBaseURI("http://api.cyberfist.xyz/badges/metadata/");
+  const setBaseURITx11 = await nft11.setBaseURI("http://api.cyberfist.xyz/badges/metadata/");
+  await setBaseURITx11.wait();
 
   // NFT12
   const nft12Info = await deploy("StandardMockNFT", {
@@ -146,28 +156,42 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     autoMine: true,
   });
   const nft12 = await ethers.getContractAt(nft12Info.abi, nft12Info.address);
-  await nft12.setBaseURI(
+  const setBaseURITx12 = await nft12.setBaseURI(
     "https://gateway.pinata.cloud/ipfs/Qmdp8uFBrWq3CJmNHviq4QLZzbw5BchA7Xi99xTxuxoQjY/"
   );
+  await setBaseURITx12.wait();
 
   for (let i = 1; i <= 5; i++) {
     // approve factory
-    await nft1.mint(deployer, i);
-    await nft2.mint(deployer, i);
-    await nft3.mint(deployer, i);
-    await nft4.mint(deployer, i);
-    await nft5.mint(deployer, i);
-    await nft6.mint(deployer, i);
-    await nft7.mint(deployer, i);
-    await nft8.mint(deployer, i);
-    await nft9.mint(deployer, i);
-    await nft10.mint(deployer, i);
-    await nft11.mint(deployer, i);
-    await nft12.mint(deployer, i);
+    const mintTx1 = await nft1.mint(deployer, i);
+    await mintTx1.wait();
+    const mintTx2 = await nft2.mint(deployer, i);
+    await mintTx2.wait();
+    const mintTx3 = await nft3.mint(deployer, i);
+    await mintTx3.wait();
+    const mintTx4 = await nft4.mint(deployer, i);
+    await mintTx4.wait();
+    const mintTx5 = await nft5.mint(deployer, i);
+    await mintTx5.wait();
+    const mintTx6 = await nft6.mint(deployer, i);
+    await mintTx6.wait();
+    const mintTx7 = await nft7.mint(deployer, i);
+    await mintTx7.wait();
+    const mintTx8 = await nft8.mint(deployer, i);
+    await mintTx8.wait();
+    const mintTx9 = await nft9.mint(deployer, i);
+    await mintTx9.wait();
+    const mintTx10 = await nft10.mint(deployer, i);
+    await mintTx10.wait();
+    const mintTx11 = await nft11.mint(deployer, i);
+    await mintTx11.wait();
+    const mintTx12 = await nft12.mint(deployer, i);
+    await mintTx12.wait();
   }
 
   for (let i = 6; i <= 50; i++) {
-    await nft7.mint(deployer, i);
+    const mintTx7 = await nft7.mint(deployer, i);
+    await mintTx7.wait();
   }
 
   // fractionalize nfts
@@ -181,6 +205,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 1", // name
     "FNFTC1" // symbol
   );
+  await fnftCollection1Receipt.wait();
 
   // NFT2
   const fnftCollection2Receipt = await FNFTCollectionFactory.createVault(
@@ -190,6 +215,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 2", // name
     "FNFTC2" // symbol
   );
+  await fnftCollection2Receipt.wait();
 
   // NFT3
   const fnftCollection3Receipt = await FNFTCollectionFactory.createVault(
@@ -199,6 +225,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 3", // name
     "FNFTC3" // symbol
   );
+  await fnftCollection3Receipt.wait();
 
   // NFT4
   const fnftCollection4Receipt = await FNFTCollectionFactory.createVault(
@@ -208,6 +235,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 4", // name
     "FNFTC4" // symbol
   );
+  await fnftCollection4Receipt.wait();
 
   // NFT5
   const fnftCollection5Receipt = await FNFTCollectionFactory.createVault(
@@ -217,6 +245,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 5", // name
     "FNFTC5" // symbol
   );
+  await fnftCollection5Receipt.wait();
 
   // NFT6
   const fnftCollection6Receipt = await FNFTCollectionFactory.createVault(
@@ -226,6 +255,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 6", // name
     "FNFTC6" // symbol
   );
+  await fnftCollection6Receipt.wait();
 
   // NFT7
   const fnftCollection7Receipt = await FNFTCollectionFactory.createVault(
@@ -235,6 +265,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 7", // name
     "FNFTC7" // symbol
   );
+  await fnftCollection7Receipt.wait();
 
   // NFT8
   const fnftCollection8Receipt = await FNFTCollectionFactory.createVault(
@@ -244,6 +275,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 8", // name
     "FNFTC8" // symbol
   );
+  await fnftCollection8Receipt.wait();
 
   // NFT9
   const fnftCollection9Receipt = await FNFTCollectionFactory.createVault(
@@ -253,6 +285,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 9", // name
     "FNFTC9" // symbol
   );
+  await fnftCollection9Receipt.wait();
 
   // NFT10
   const fnftCollection10Receipt = await FNFTCollectionFactory.createVault(
@@ -262,6 +295,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 10", // name
     "FNFTC10" // symbol
   );
+  await fnftCollection10Receipt.wait();
 
   // NFT11
   const fnftCollection11Receipt = await FNFTCollectionFactory.createVault(
@@ -271,6 +305,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 11", // name
     "FNFTC11" // symbol
   );
+  await fnftCollection11Receipt.wait();
 
   // NFT12
   const fnftCollection12Receipt = await FNFTCollectionFactory.createVault(
@@ -280,6 +315,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "FNFT Collection 12", // name
     "FNFTC12" // symbol
   );
+  await fnftCollection12Receipt.wait();
 
   const fnftCollection1Address = await getFNFTCollectionAddress(fnftCollection1Receipt);
   const fnftCollection2Address = await getFNFTCollectionAddress(fnftCollection2Receipt);
@@ -307,36 +343,60 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const fnftCollection11 = await ethers.getContractAt("FNFTCollection", fnftCollection11Address);
   const fnftCollection12 = await ethers.getContractAt("FNFTCollection", fnftCollection12Address);
 
-  await nft1.setApprovalForAll(fnftCollection1.address, true);
-  await nft2.setApprovalForAll(fnftCollection2.address, true);
-  await nft3.setApprovalForAll(fnftCollection3.address, true);
-  await nft4.setApprovalForAll(fnftCollection4.address, true);
-  await nft5.setApprovalForAll(fnftCollection5.address, true);
-  await nft6.setApprovalForAll(fnftCollection6.address, true);
-  await nft7.setApprovalForAll(fnftCollection7.address, true);
-  await nft8.setApprovalForAll(fnftCollection8.address, true);
-  await nft9.setApprovalForAll(fnftCollection9.address, true);
-  await nft10.setApprovalForAll(fnftCollection10.address, true);
-  await nft11.setApprovalForAll(fnftCollection11.address, true);
-  await nft12.setApprovalForAll(fnftCollection12.address, true);
+  const setApprovalForAllTx1 = await nft1.setApprovalForAll(fnftCollection1.address, true);
+  await setApprovalForAllTx1.wait();
+  const setApprovalForAllTx2 = await nft2.setApprovalForAll(fnftCollection2.address, true);
+  await setApprovalForAllTx2.wait();
+  const setApprovalForAllTx3 = await nft3.setApprovalForAll(fnftCollection3.address, true);
+  await setApprovalForAllTx3.wait();
+  const setApprovalForAllTx4 = await nft4.setApprovalForAll(fnftCollection4.address, true);
+  await setApprovalForAllTx4.wait();
+  const setApprovalForAllTx5 = await nft5.setApprovalForAll(fnftCollection5.address, true);
+  await setApprovalForAllTx5.wait();
+  const setApprovalForAllTx6 = await nft6.setApprovalForAll(fnftCollection6.address, true);
+  await setApprovalForAllTx6.wait();
+  const setApprovalForAllTx7 = await nft7.setApprovalForAll(fnftCollection7.address, true);
+  await setApprovalForAllTx7.wait();
+  const setApprovalForAllTx8 = await nft8.setApprovalForAll(fnftCollection8.address, true);
+  await setApprovalForAllTx8.wait();
+  const setApprovalForAllTx9 = await nft9.setApprovalForAll(fnftCollection9.address, true);
+  await setApprovalForAllTx9.wait();
+  const setApprovalForAllTx10 = await nft10.setApprovalForAll(fnftCollection10.address, true);
+  await setApprovalForAllTx10.wait();
+  const setApprovalForAllTx11 = await nft11.setApprovalForAll(fnftCollection11.address, true);
+  await setApprovalForAllTx11.wait();
+  const setApprovalForAllTx12 = await nft12.setApprovalForAll(fnftCollection12.address, true);
+  await setApprovalForAllTx12.wait();
 
-  await fnftCollection1.mintTo([1, 2, 3, 4, 5], [], deployer);
-  await fnftCollection2.mintTo([1], [], deployer);
+  const mintToTx1 = await fnftCollection1.mintTo([1, 2, 3, 4, 5], [], deployer);
+  await mintToTx1.wait();
+  const mintToTx2 = await fnftCollection2.mintTo([1], [], deployer);
+  await mintToTx2.wait();
   //skip fnft 3 mint
-  await fnftCollection4.mintTo([1, 2, 3, 4, 5], [], deployer); // bid 3
-  await fnftCollection5.mintTo([1, 2, 3, 4, 5], [], deployer); // bid 2 and redeem 2
-  await fnftCollection6.mintTo([1, 2, 3, 4, 5], [], deployer); // no tokenURI
-  await fnftCollection7.mintTo(
+  const mintToTx4 = await fnftCollection4.mintTo([1, 2, 3, 4, 5], [], deployer); // bid 3
+  await mintToTx4.wait();
+  const mintToTx5 = await fnftCollection5.mintTo([1, 2, 3, 4, 5], [], deployer); // bid 2 and redeem 2
+  await mintToTx5.wait();
+  const mintToTx6 = await fnftCollection6.mintTo([1, 2, 3, 4, 5], [], deployer); // no tokenURI
+  await mintToTx6.wait();
+  const mintToTx7 = await fnftCollection7.mintTo(
     Array.from({ length: 50 }, (_, i) => i + 1),
     [],
     deployer
   ); // mint 50
-  await fnftCollection8.mintTo([1, 2, 3], [], deployer); // 3 mint to deployer
-  await fnftCollection8.mintTo([4, 5], [], deployer); // 2 mint to chosen (change address)
-  await fnftCollection9.mintTo([1, 2, 3, 4, 5], [], deployer); // ifo not started
-  await fnftCollection10.mintTo([1, 2, 3, 4, 5], [], deployer); // ifo ongoing
-  await fnftCollection11.mintTo([1, 2, 3, 4, 5], [], deployer); // ifo paused
-  await fnftCollection12.mintTo([1, 2, 3, 4, 5], [], deployer); // ifo finished
+  await mintToTx7.wait();
+  const mintToTx8a = await fnftCollection8.mintTo([1, 2, 3], [], deployer); // 3 mint to deployer
+  await mintToTx8a.wait();
+  const mintToTx8b = await fnftCollection8.mintTo([4, 5], [], deployer); // 2 mint to chosen (change address)
+  await mintToTx8b.wait();
+  const mintToTx9 = await fnftCollection9.mintTo([1, 2, 3, 4, 5], [], deployer); // ifo not started
+  await mintToTx9.wait();
+  const mintToTx10 = await fnftCollection10.mintTo([1, 2, 3, 4, 5], [], deployer); // ifo ongoing
+  await mintToTx10.wait();
+  const mintToTx11 = await fnftCollection11.mintTo([1, 2, 3, 4, 5], [], deployer); // ifo paused
+  await mintToTx11.wait();
+  const mintToTx12 = await fnftCollection12.mintTo([1, 2, 3, 4, 5], [], deployer); // ifo finished
+  await mintToTx12.wait();
 };
 
 async function getFNFTCollectionAddress(transactionReceipt: any) {
@@ -348,23 +408,6 @@ async function getFNFTCollectionAddress(transactionReceipt: any) {
   const receipt = await transactionReceipt.wait();
   const event = receipt.logs.find((log: any) => log.topics[0] === topic);
   return _interface.parseLog(event).args[2];
-}
-
-async function getIFOAddress(transactionReceipt: any) {
-  const abi = [
-    "event IFOCreated(address indexed ifo, address indexed fnft, uint256 amountForSale, uint256 price, uint256 cap, uint256 duration, bool allowWhitelisting);",
-  ];
-  const _interface = new ethers.utils.Interface(abi);
-  const topic = "0x1bb72b46985d7a3abad1d345d856e8576c1d4842b34a5373f3533a4c72970352";
-  const receipt = await transactionReceipt.wait();
-  const event = receipt.logs.find((log: any) => log.topics[0] === topic);
-  return _interface.parseLog(event).args[0];
-}
-
-async function mineNBlocks(n: number) {
-  for (let index = 0; index < n; index++) {
-    await ethers.provider.send("evm_mine", []);
-  }
 }
 
 async function getContract(hre: HardhatRuntimeEnvironment, key: string) {

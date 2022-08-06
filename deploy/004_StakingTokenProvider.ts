@@ -30,12 +30,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     deployerInfo.abi,
     signer
   );
-  await deployerContract.deployStakingTokenProvider(
+  const deployStakingTokenProviderTx = await deployerContract.deployStakingTokenProvider(
     stakingTokenProviderImpl.address,
     UNISWAP_V2_FACTORY,
     WETH,
     "x"
   );
+  await deployStakingTokenProviderTx.wait();
 };
 func.tags = ['main', 'local', 'seed'];
 export default func;
