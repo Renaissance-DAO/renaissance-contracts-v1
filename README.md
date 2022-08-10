@@ -8,13 +8,13 @@
 
 ## Deploy
 - Deploy to a local node<br />
-`npx hardhat run --network localhost dev-scripts/deploy.js`
+`npx hardhat deploy --tags seed --network hardhat`
 
 - Deploy to a testnet<br />
-`npx hardhat run --network rinkeby dev-scripts/deploy.js`
+`npx hardhat deploy --tags seed --network rinkeby`
 
 - Deploy to a testnet<br />
-`npx hardhat run --network ethereum scripts/deploy.js`
+`npx hardhat deploy --tags main --network ethereum`
 
 ## Setup forge test
 - Install submodule<br />

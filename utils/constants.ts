@@ -1,5 +1,5 @@
 export const testnets = [
-  process.env.TEST_CHAINID,
+  // process.env.TEST_CHAINID,
   process.env.LOCAL_CHAINID
 ];
 

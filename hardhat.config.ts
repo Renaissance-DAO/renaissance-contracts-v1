@@ -36,7 +36,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       chainId: +process.env.LOCAL_CHAINID!,
       saveDeployments: false,
-      gasPrice: 200000000000,
+      gasPrice: 2000000000000,
       gas: 30000000,
       forking: {
         url: "https://eth-mainnet.alchemyapi.io/v2/7p4KzWgfAW2gU_4xOoPT5mpxDdOgFycO"
@@ -46,18 +46,27 @@ const config: HardhatUserConfig = {
       url: process.env.TEST_URI,
       chainId: +process.env.TEST_CHAINID!,
       accounts: [`${process.env.TEST_PRIVATE_KEY}`],
-      timeout: 600000,
-      gasPrice: 2000000000,
-      gas: 8000000,
+      timeout: 6000000,
+      gasPrice: 2000000000000,
+      gas: 300000000,
       saveDeployments: false,
+    },
+    polygon: {
+      url: process.env.POLYGON_URI,
+      chainId: +process.env.POLYGON_CHAINID!,
+      accounts: [`${process.env.POLYGON_PRIVATE_KEY}`],
+      timeout: 6000000,
+      gasPrice: 2000000000000,
+      gas: 300000000,
+      saveDeployments: true,
     },
     ethereum: {
       url: process.env.MAIN_URI,
       chainId: +process.env.MAIN_CHAINID!,
       accounts: [`${process.env.MAIN_PRIVATE_KEY}`],
-      timeout: 600000,
-      gasPrice: 2000000000,
-      gas: 8000000,
+      timeout: 6000000,
+      gasPrice: 2000000000000,
+      gas: 300000000,
       saveDeployments: true,
     }
   },
@@ -69,16 +78,18 @@ const config: HardhatUserConfig = {
   namedAccounts: {
     deployer: 0,
     WETH: {
-      hardhat: '0x000000000000000000000000000000000000000a',
-      rinkeby: '0x000000000000000000000000000000000000000b',
+      hardhat: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+      rinkeby: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+      polygon: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
       ethereum: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     },
     TREASURY: {
-      default: '0x0000000000000000000000000000000000000001a',
+      default: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
     },
     UNISWAP_V2_FACTORY: {
-      hardhat: '0x000000000000000000000000000000000000000a',
-      rinkeby: '0x000000000000000000000000000000000000000b',
+      hardhat: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+      rinkeby: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+      polygon: '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32', //quickswap
       ethereum: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
     },
   },
