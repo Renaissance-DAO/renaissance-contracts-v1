@@ -439,31 +439,31 @@ contract FNFTCollection is
             winning: msg.sender
         });
 
-        emit AuctionStarted(msg.sender, tokenId);
+        emit AuctionStarted(msg.sender, tokenId, msg.value);
     }
 
-    function bid(uint256 tokenId, uint256 price) external payable override {
+    function bid(uint256 tokenId) external payable override {
         _onlyOwnerIfPaused(4);
         if (!enableBid || is1155) revert BidDisabled();
         if (auctions[tokenId].state != AuctionState.Live) revert AuctionNotLive();
         uint256 livePrice = auctions[tokenId].livePrice;
         uint256 increase = factory.minBidIncrease() + 10000;
-        if (price * 10000 < livePrice * increase) revert BidTooLow();
+        if (msg.value * 10000 < livePrice * increase) revert BidTooLow();
 
         uint256 auctionEnd = auctions[tokenId].end;
         if (block.timestamp >= auctionEnd) revert AuctionEnded();
 
-        _burn(msg.sender, price);
-        _mint(auctions[tokenId].winning, livePrice);
+        _burn(msg.sender, BASE);
+        _mint(auctions[tokenId].winning, BASE);
 
-        auctions[tokenId].livePrice = price;
+        auctions[tokenId].livePrice = msg.value;
         auctions[tokenId].winning = msg.sender;
 
         if (auctionEnd - block.timestamp <= 15 minutes) {
             auctions[tokenId].end += 15 minutes;
         }
 
-        emit BidMade(msg.sender, tokenId, price);
+        emit BidMade(msg.sender, tokenId, msg.value);
     }
 
     function endAuction(uint256 tokenId) external override {
