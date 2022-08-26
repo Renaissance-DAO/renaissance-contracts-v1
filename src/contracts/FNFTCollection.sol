@@ -480,13 +480,6 @@ contract FNFTCollection is
         auctions[tokenId].state = AuctionState.Inactive;
         auctions[tokenId].winning = address(0);
 
-        // // Pay the tokens + toll.
-        // (, uint256 _randomRedeemFee, uint256 _targetRedeemFee, ,) = vaultFees();
-        // uint256 totalFee = (_targetRedeemFee * specificIds.length) + (
-        //     _randomRedeemFee * (amount - specificIds.length)
-        // );
-        // _chargeAndDistributeFees(msg.sender, totalFee);
-
         if (price > 0) _safeTransferETH(depositors[tokenId], price);
 
         uint256[] memory withdrawTokenIds = new uint256[](1);

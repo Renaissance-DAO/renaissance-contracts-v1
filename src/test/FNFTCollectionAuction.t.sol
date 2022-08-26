@@ -86,7 +86,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.prank(bidderOne);
     vm.expectRevert(IFNFTCollection.BidDisabled.selector);
-    vault.startAuction(1, 1e18);
+    vault.startAuction(1);
   }
 
   function testStartAuctionBidDisabled() public {
@@ -96,7 +96,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.expectRevert(IFNFTCollection.BidDisabled.selector);
     vm.prank(bidderOne);
-    vault.startAuction(1, 1e18);
+    vault.startAuction(1);
   }
 
   function testStartAuctionPaused() public {
@@ -108,7 +108,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.expectRevert(IFNFTCollection.Paused.selector);
     vm.prank(bidderOne);
-    vault.startAuction(1, 1e18);
+    vault.startAuction(1);
   }
 
   function testStartAuctionAuctionLive() public {
@@ -118,19 +118,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.prank(bidderTwo);
     vm.expectRevert(IFNFTCollection.AuctionLive.selector);
-    vault.startAuction(1, 1e18);
-  }
-
-  function testStartAuctionBidTooLow() public {
-    mintVaultTokens(2);
-    vault.setVaultFeatures(true, false, false, false, false, true);
-
-    vault.transfer(bidderOne, 1e18);
-
-    vm.prank(bidderOne);
-    vm.expectRevert(IFNFTCollection.BidTooLow.selector);
-    vault.startAuction(1, 9e17);
-
+    vault.startAuction(1);
   }
 
   function testBid() public {
@@ -501,6 +489,6 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     vault.transfer(bidderOne, 1e18);
 
     vm.prank(bidderOne);
-    vault.startAuction(1, 1e18);
+    vault.startAuction(1);
   }
 }
