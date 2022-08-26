@@ -156,8 +156,8 @@ interface IFNFTCollection is IERC20Upgradeable {
     ) external returns (uint256[] calldata);
     function withdraw(uint256[] calldata tokenIds) external returns (uint256[] memory);
 
-    function startAuction(uint256 tokenId, uint256 price) external;
-    function bid(uint256 tokenId, uint256 price) external;
+    function startAuction(uint256 tokenId) external payable;
+    function bid(uint256 tokenId, uint256 price) external payable;
     function endAuction(uint256 tokenId) external;
 
     function flashFee(address borrowedToken, uint256 amount) external view returns (uint256);
@@ -182,7 +182,7 @@ interface IFNFTCollection is IERC20Upgradeable {
 
     event AuctionLengthUpdated(uint256 length);
     /// @notice An event emitted when an auction starts
-    event AuctionStarted(address indexed buyer, uint256 tokenId, uint256 price);
+    event AuctionStarted(address indexed buyer, uint256 tokenId);
     /// @notice An event emitted when an auction is won
     event AuctionWon(address indexed buyer, uint256 tokenId, uint256 price);
     /// @notice An event emitted when a bid is made

@@ -425,25 +425,24 @@ contract FNFTCollection is
         return ids;
     }
 
-    function startAuction(uint256 tokenId, uint256 price) external override {
+    function startAuction(uint256 tokenId) external payable override {
         _onlyOwnerIfPaused(4);
         if (!enableBid || is1155) revert BidDisabled();
         if (auctions[tokenId].state != AuctionState.Inactive) revert AuctionLive();
-        if (price < BASE) revert BidTooLow();
 
-        _burn(msg.sender, price);
+        _burn(msg.sender, BASE);
 
         auctions[tokenId] = Auction({
-            livePrice: price,
+            livePrice: msg.value,
             end: block.timestamp + auctionLength,
             state: AuctionState.Live,
             winning: msg.sender
         });
 
-        emit AuctionStarted(msg.sender, tokenId, price);
+        emit AuctionStarted(msg.sender, tokenId);
     }
 
-    function bid(uint256 tokenId, uint256 price) external override {
+    function bid(uint256 tokenId, uint256 price) external payable override {
         _onlyOwnerIfPaused(4);
         if (!enableBid || is1155) revert BidDisabled();
         if (auctions[tokenId].state != AuctionState.Live) revert AuctionNotLive();
