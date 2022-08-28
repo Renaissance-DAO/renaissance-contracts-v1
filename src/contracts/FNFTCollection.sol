@@ -490,9 +490,6 @@ contract FNFTCollection is
         auctions[tokenId].state = AuctionState.Inactive;
         auctions[tokenId].winning = address(0);
 
-        console.log("ETH: ", price);
-        console.log("ETH2: ", address(this).balance);
-        console.log("dep: ", depositors[tokenId]);
         if (price > 0) _safeTransferETH(depositors[tokenId], price);
 
         uint256[] memory withdrawTokenIds = new uint256[](1);

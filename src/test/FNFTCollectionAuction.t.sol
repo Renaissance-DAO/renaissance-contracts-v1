@@ -228,6 +228,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     address depositor = address(this);
     uint256 currentDepositorBalance = vault.balanceOf(depositor);
+    uint256 currentDepositorETHBalance = address(depositor).balance;
 
     vm.prank(bidderTwo);
     vault.bid{value: 1 ether}(1);
@@ -238,7 +239,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     vault.getAuction(1);
 
     assertEq(vault.balanceOf(depositor), currentDepositorBalance);
-    assertEq(depositor.balance, 1 ether);
+    assertEq(depositor.balance, currentDepositorETHBalance + 1 ether);
     assertEq(token.ownerOf(1), bidderTwo);
     vm.expectRevert(IFNFTCollection.NotInVault.selector);
     vault.getDepositor(1);
@@ -487,4 +488,9 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     vm.prank(bidderOne);
     vault.startAuction(1);
   }
+
+  // // to be able to receive funds
+  receive() external payable {} // solhint-disable-line no-empty-blocks
+
+  fallback() external payable {} // solhint-disable-line no-empty-blocks`
 }
