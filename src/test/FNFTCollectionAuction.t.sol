@@ -58,7 +58,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     assertEq(vault.balanceOf(bidderOne), 0);
     (uint256 livePrice, uint256 end, IFNFTCollection.AuctionState state, address winning) = vault.getAuction(1);
-    assertEq(livePrice, 1e18);
+    assertEq(livePrice, 0);
     assertEq(end, block.timestamp + 3 days);
     assertEq(uint256(state), 1);
     assertEq(winning, bidderOne);
@@ -128,7 +128,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     vault.transfer(bidderTwo, newBid);
 
     vm.prank(bidderTwo);
-    vault.bid(1, newBid);
+    vault.bid(1);
 
     assertEq(vault.balanceOf(bidderOne), 1e18);
     assertEq(vault.balanceOf(bidderTwo), 0);
@@ -150,7 +150,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.prank(bidderTwo);
     vm.expectRevert(IFNFTCollection.BidDisabled.selector);
-    vault.bid(1, newBid);
+    vault.bid(1);
   }
 
   function testBidPaused() public {
@@ -163,7 +163,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.prank(bidderTwo);
     vm.expectRevert(IFNFTCollection.Paused.selector);
-    vault.bid(1, newBid);
+    vault.bid(1);
   }
 
   function testBidAuctionNotLive() public {
@@ -174,7 +174,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.prank(bidderOne);
     vm.expectRevert(IFNFTCollection.AuctionNotLive.selector);
-    vault.bid(1, 1e18);
+    vault.bid(1);
   }
 
   function testBidBidTooLow() public {
@@ -185,7 +185,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.prank(bidderTwo);
     vm.expectRevert(IFNFTCollection.BidTooLow.selector);
-    vault.bid(1, newBid);
+    vault.bid(1);
   }
 
   function testBidAuctionEnded() public {
@@ -198,7 +198,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
 
     vm.prank(bidderTwo);
     vm.expectRevert(IFNFTCollection.AuctionEnded.selector);
-    vault.bid(1, newBid);
+    vault.bid(1);
   }
 
   function testBidExtendAuctionDuration() public {
@@ -213,7 +213,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     uint256 newEnd = end + 15 minutes;
 
     vm.prank(bidderTwo);
-    vault.bid(1, newBid);
+    vault.bid(1);
 
     (uint256 livePrice, uint256 endAfterBid, IFNFTCollection.AuctionState state, address winning) = vault.getAuction(1);
     assertEq(livePrice, newBid);
@@ -232,7 +232,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     uint256 currentDepositorBalance = vault.balanceOf(depositor);
 
     vm.prank(bidderTwo);
-    vault.bid(1, newBid);
+    vault.bid(1);
     vm.warp(block.timestamp + 3 days);
     vault.endAuction(1);
 
@@ -252,7 +252,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     vault.transfer(bidderTwo, newBid);
 
     vm.prank(bidderTwo);
-    vault.bid(1, newBid);
+    vault.bid(1);
     vm.warp(block.timestamp + 3 days);
     vault.setVaultFeatures(true, false, false, false, false, false);
     vm.expectRevert(IFNFTCollection.BidDisabled.selector);
@@ -266,7 +266,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     vault.transfer(bidderTwo, newBid);
 
     vm.prank(bidderTwo);
-    vault.bid(1, newBid);
+    vault.bid(1);
     vm.warp(block.timestamp + 3 days);
 
     pauseFeature(4);
@@ -294,7 +294,7 @@ contract FNFTCollectionAuctionTest is DSTest, SetupEnvironment {
     vault.transfer(bidderTwo, newBid);
 
     vm.startPrank(bidderTwo);
-    vault.bid(1, newBid);
+    vault.bid(1);
 
     vm.warp(block.timestamp + 3 days - 1 seconds);
     vm.expectRevert(IFNFTCollection.AuctionNotEnded.selector);
