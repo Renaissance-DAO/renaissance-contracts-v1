@@ -440,6 +440,9 @@ contract FNFTCollection is
             winning: msg.sender
         });
 
+        (, , , , , uint256 _bidFee) = vaultFees();
+        _chargeAndDistributeFees(msg.sender, _bidFee);
+
         emit AuctionStarted(msg.sender, tokenId, msg.value);
     }
 
@@ -456,6 +459,9 @@ contract FNFTCollection is
 
         _burn(msg.sender, BASE);
         _mint(auctions[tokenId].winning, BASE);
+
+        (, , , , , uint256 _bidFee) = vaultFees();
+        _chargeAndDistributeFees(msg.sender, _bidFee);
 
         auctions[tokenId].livePrice = msg.value;
         auctions[tokenId].winning = msg.sender;

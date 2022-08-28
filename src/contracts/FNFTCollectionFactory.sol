@@ -49,7 +49,6 @@ contract FNFTCollectionFactory is
         factoryRandomRedeemFee = uint64(0.05 ether);
         factoryTargetRedeemFee = uint64(0.1 ether);
         factoryRandomSwapFee = uint64(0.05 ether);
-        factoryBidFee = uint64(0.01 ether);
         factoryTargetSwapFee = uint64(0.1 ether);
         maxAuctionLength = 2 weeks;
         minAuctionLength = 3 days;
