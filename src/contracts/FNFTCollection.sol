@@ -21,6 +21,9 @@ import "./interfaces/IPausable.sol";
 import "./interfaces/IVaultManager.sol";
 import "./token/ERC20FlashMintUpgradeable.sol";
 
+import {console} from "../test/utils/utils.sol";
+
+
 // Authors: @0xKiwi_ and @alexgausman.
 
 contract FNFTCollection is
@@ -452,7 +455,7 @@ contract FNFTCollection is
         if (auctions[tokenId].state != AuctionState.Live) revert AuctionNotLive();
         uint256 livePrice = auctions[tokenId].livePrice;
         uint256 increase = factory.minBidIncrease() + 10000;
-        if (msg.value * 10000 < livePrice * increase) revert BidTooLow();
+        if (msg.value * 10000 <= livePrice * increase) revert BidTooLow();
 
         uint256 auctionEnd = auctions[tokenId].end;
         if (block.timestamp >= auctionEnd) revert AuctionEnded();
@@ -487,6 +490,9 @@ contract FNFTCollection is
         auctions[tokenId].state = AuctionState.Inactive;
         auctions[tokenId].winning = address(0);
 
+        console.log("ETH: ", price);
+        console.log("ETH2: ", address(this).balance);
+        console.log("dep: ", depositors[tokenId]);
         if (price > 0) _safeTransferETH(depositors[tokenId], price);
 
         uint256[] memory withdrawTokenIds = new uint256[](1);
