@@ -165,7 +165,7 @@ contract FNFTCollection is
         _burn(msg.sender, BASE * amount);
 
         // Pay the tokens + toll.
-        (,, uint256 _targetRedeemFee,,) = vaultFees();
+        (,, uint256 _targetRedeemFee,,,) = vaultFees();
         uint256 totalFee = _targetRedeemFee * amount;
         _chargeAndDistributeFees(msg.sender, totalFee);
 
@@ -251,7 +251,7 @@ contract FNFTCollection is
     }
 
     function mintFee() public view override virtual returns (uint256) {
-        (uint256 _mintFee, , , ,) = factory.vaultFees(vaultId);
+        (uint256 _mintFee, , , , ,) = factory.vaultFees(vaultId);
         return _mintFee;
     }
 
@@ -275,12 +275,12 @@ contract FNFTCollection is
     }
 
     function randomRedeemFee() public view override virtual returns (uint256) {
-        (, uint256 _randomRedeemFee, , ,) = factory.vaultFees(vaultId);
+        (, uint256 _randomRedeemFee, , , ,) = factory.vaultFees(vaultId);
         return _randomRedeemFee;
     }
 
     function randomSwapFee() public view override virtual returns (uint256) {
-        (, , , uint256 _randomSwapFee, ) = factory.vaultFees(vaultId);
+        (, , , uint256 _randomSwapFee, ,) = factory.vaultFees(vaultId);
         return _randomSwapFee;
     }
 
@@ -300,7 +300,7 @@ contract FNFTCollection is
         _burn(msg.sender, BASE * amount);
 
         // Pay the tokens + toll.
-        (, uint256 _randomRedeemFee, uint256 _targetRedeemFee, ,) = vaultFees();
+        (, uint256 _randomRedeemFee, uint256 _targetRedeemFee, , ,) = vaultFees();
         uint256 totalFee = (_targetRedeemFee * specificIds.length) + (
             _randomRedeemFee * (amount - specificIds.length)
         );
@@ -317,10 +317,11 @@ contract FNFTCollection is
         uint256 _randomRedeemFee,
         uint256 _targetRedeemFee,
         uint256 _randomSwapFee,
-        uint256 _targetSwapFee
+        uint256 _targetSwapFee,
+        uint256 _bidFee
     ) public override virtual {
         _onlyPrivileged();
-        factory.setVaultFees(vaultId, _mintFee, _randomRedeemFee, _targetRedeemFee, _randomSwapFee, _targetSwapFee);
+        factory.setVaultFees(vaultId, _mintFee, _randomRedeemFee, _targetRedeemFee, _randomSwapFee, _targetSwapFee, _bidFee);
     }
 
     // The curator has control over options like fees and features
@@ -410,7 +411,7 @@ contract FNFTCollection is
         if (count != specificIds.length && !enableRandomSwap) revert RandomSwapDisabled();
         if (specificIds.length != 0 && !enableTargetSwap) revert TargetSwapDisabled();
 
-        (, , ,uint256 _randomSwapFee, uint256 _targetSwapFee) = vaultFees();
+        (, , ,uint256 _randomSwapFee, uint256 _targetSwapFee, ) = vaultFees();
         uint256 totalFee = (_targetSwapFee * specificIds.length) + (
             _randomSwapFee * (count - specificIds.length)
         );
@@ -507,16 +508,16 @@ contract FNFTCollection is
     }
 
     function targetRedeemFee() public view override virtual returns (uint256) {
-        (, , uint256 _targetRedeemFee, ,) = factory.vaultFees(vaultId);
+        (, , uint256 _targetRedeemFee, , ,) = factory.vaultFees(vaultId);
         return _targetRedeemFee;
     }
 
     function targetSwapFee() public view override virtual returns (uint256) {
-        (, , , ,uint256 _targetSwapFee) = factory.vaultFees(vaultId);
+        (, , , ,uint256 _targetSwapFee,) = factory.vaultFees(vaultId);
         return _targetSwapFee;
     }
 
-    function vaultFees() public view override virtual returns (uint256, uint256, uint256, uint256, uint256) {
+    function vaultFees() public view override virtual returns (uint256, uint256, uint256, uint256, uint256, uint256) {
         return factory.vaultFees(vaultId);
     }
 

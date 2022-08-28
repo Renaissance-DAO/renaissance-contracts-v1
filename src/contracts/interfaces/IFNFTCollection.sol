@@ -67,7 +67,7 @@ interface IFNFTCollection is IERC20Upgradeable {
 
     function targetSwapFee() external view returns (uint256);
 
-    function vaultFees() external view returns (uint256, uint256, uint256, uint256, uint256);
+    function vaultFees() external view returns (uint256, uint256, uint256, uint256, uint256, uint256);
 
     function shutdown(address recipient) external;
 
@@ -103,7 +103,8 @@ interface IFNFTCollection is IERC20Upgradeable {
         uint256 _randomRedeemFee,
         uint256 _targetRedeemFee,
         uint256 _randomSwapFee,
-        uint256 _targetSwapFee
+        uint256 _targetSwapFee,
+        uint256 _bidFee
     ) external;
 
     function setAuctionLength(uint256 _auctionLength) external;
@@ -241,4 +242,5 @@ interface IFNFTCollection is IERC20Upgradeable {
     error SameCurator();
     error ZeroAddress();
     error ZeroTransferAmount();
+    error TxFailed();
 }
