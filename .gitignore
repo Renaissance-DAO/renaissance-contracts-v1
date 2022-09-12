@@ -6,6 +6,7 @@ bin
 .DS_Store
 out/
 yarn-error.log
+deployments
 
 #Hardhat files
 cache

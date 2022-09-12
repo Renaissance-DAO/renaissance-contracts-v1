@@ -22,6 +22,7 @@ contract FNFTCollectionFactory is
     uint64 public override factoryRandomRedeemFee;
     uint64 public override factoryRandomSwapFee;
     uint64 public override factoryTargetRedeemFee;
+    uint64 public override factoryBidFee;
 
     IVaultManager public override vaultManager;
     uint64 public override factoryTargetSwapFee;
@@ -75,7 +76,7 @@ contract FNFTCollectionFactory is
         eligibilityManager = _eligibilityManager;
     }
 
-    function vaultFees(uint256 vaultId) external view virtual override returns (uint256, uint256, uint256, uint256, uint256) {
+    function vaultFees(uint256 vaultId) external view virtual override returns (uint256, uint256, uint256, uint256, uint256, uint256) {
         VaultFees memory fees = _vaultFees[vaultId];
         if (fees.active) {
             return (
@@ -83,11 +84,12 @@ contract FNFTCollectionFactory is
                 uint256(fees.randomRedeemFee),
                 uint256(fees.targetRedeemFee),
                 uint256(fees.randomSwapFee),
-                uint256(fees.targetSwapFee)
+                uint256(fees.targetSwapFee),
+                uint256(fees.bidFee)
             );
         }
 
-        return (uint256(factoryMintFee), uint256(factoryRandomRedeemFee), uint256(factoryTargetRedeemFee), uint256(factoryRandomSwapFee), uint256(factoryTargetSwapFee));
+        return (uint256(factoryMintFee), uint256(factoryRandomRedeemFee), uint256(factoryTargetRedeemFee), uint256(factoryRandomSwapFee), uint256(factoryTargetSwapFee), uint256(factoryBidFee));
     }
 
     function disableVaultFees(uint256 vaultId) public virtual override {
@@ -105,6 +107,7 @@ contract FNFTCollectionFactory is
         uint256 _factoryTargetRedeemFee,
         uint256 _factoryRandomSwapFee,
         uint256 _factoryTargetSwapFee,
+        uint256 _factoryBidFee,
         uint256 _flashLoanFee
     ) public virtual override onlyOwner {
         if (_factoryMintFee > 0.5 ether) revert FeeTooHigh();
@@ -119,6 +122,7 @@ contract FNFTCollectionFactory is
         factoryTargetRedeemFee = uint64(_factoryTargetRedeemFee);
         factoryRandomSwapFee = uint64(_factoryRandomSwapFee);
         factoryTargetSwapFee = uint64(_factoryTargetSwapFee);
+        factoryBidFee = uint64(_factoryBidFee);
         flashLoanFee = _flashLoanFee;
 
         emit FactoryFeesUpdated(
@@ -127,6 +131,7 @@ contract FNFTCollectionFactory is
             _factoryTargetRedeemFee,
             _factoryRandomSwapFee,
             _factoryTargetSwapFee,
+            _factoryBidFee,
             _flashLoanFee
         );
     }
@@ -154,7 +159,8 @@ contract FNFTCollectionFactory is
         uint256 _randomRedeemFee,
         uint256 _targetRedeemFee,
         uint256 _randomSwapFee,
-        uint256 _targetSwapFee
+        uint256 _targetSwapFee,
+        uint256 _bidFee
     ) public virtual override {
         if (msg.sender != owner()) {
             address vaultAddr = vaultManager.vault(vaultId);
@@ -165,6 +171,7 @@ contract FNFTCollectionFactory is
         if (_targetRedeemFee > 0.5 ether) revert FeeTooHigh();
         if (_randomSwapFee > 0.5 ether) revert FeeTooHigh();
         if (_targetSwapFee > 0.5 ether) revert FeeTooHigh();
+        if (_bidFee > 0.5 ether) revert FeeTooHigh();
 
         _vaultFees[vaultId] = VaultFees(
             true,
@@ -172,9 +179,10 @@ contract FNFTCollectionFactory is
             uint64(_randomRedeemFee),
             uint64(_targetRedeemFee),
             uint64(_randomSwapFee),
-            uint64(_targetSwapFee)
+            uint64(_targetSwapFee),
+            uint64(_bidFee)
         );
-        emit VaultFeesUpdated(vaultId, _mintFee, _randomRedeemFee, _targetRedeemFee, _randomSwapFee, _targetSwapFee);
+        emit VaultFeesUpdated(vaultId, _mintFee, _randomRedeemFee, _targetRedeemFee, _randomSwapFee, _targetSwapFee, _bidFee);
     }
 
     /// @dev 0x042f186c == FNFTCollection.__FNFTCollection_init.selector

@@ -106,7 +106,8 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
       0.1 ether,
       0.2 ether,
       0.1 ether,
-      0.2 ether
+      0.2 ether,
+      0
     );
 
     (
@@ -114,7 +115,8 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
       uint256 randomRedeemFee,
       uint256 targetRedeemFee,
       uint256 randomSwapFee,
-      uint256 targetSwapFee
+      uint256 targetSwapFee,
+      uint256 targetBidFee
     ) = fnftCollectionFactory.vaultFees(0);
 
     assertEq(mintFee, 0.2 ether);
@@ -122,6 +124,7 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
     assertEq(targetRedeemFee, 0.2 ether);
     assertEq(randomSwapFee, 0.1 ether);
     assertEq(targetSwapFee, 0.2 ether);
+    assertEq(targetBidFee, 0);
   }
 
   function testVaultFeesFallback() public {
@@ -132,7 +135,8 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
       uint256 randomRedeemFee,
       uint256 targetRedeemFee,
       uint256 randomSwapFee,
-      uint256 targetSwapFee
+      uint256 targetSwapFee,
+      uint256 targetBidFee
     ) = fnftCollectionFactory.vaultFees(0);
 
     assertEq(mintFee, 0.1 ether);
@@ -140,6 +144,7 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
     assertEq(targetRedeemFee, 0.1 ether);
     assertEq(randomSwapFee, 0.05 ether);
     assertEq(targetSwapFee, 0.1 ether);
+    assertEq(targetBidFee, 0);
   }
 
   function testSetVaultFeesTooHigh() public {
@@ -151,7 +156,8 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
       0.6 ether,
       0.6 ether,
       0.6 ether,
-      0.6 ether
+      0.6 ether,
+      0
     );
   }
 
@@ -514,20 +520,20 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
   function testSetFlashLoanFeeTooHigh() public {
     vm.expectRevert(IFNFTCollectionFactory.FeeTooHigh.selector);
     // set flashLoanFee to 501
-    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 501);
+    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 501, 0);
   }
 
   function testSetFlashLoanFeeNotOwner() public {
     vm.expectRevert("Ownable: caller is not the owner");
     vm.prank(address(1));
     // set flashLoanFee to 499
-    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 499);
+    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 499, 0);
   }
 
   function testFlashLoanGood() public {
     mintVaultTokens(1);
     // set flashLoanFee to 100 (1%)
-    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 100);
+    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 100, 0);
 
     FlashBorrower flashBorrower = new FlashBorrower(address(vault));
     vault.transfer(address(flashBorrower), 0.01 ether); // for fees
@@ -552,7 +558,7 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
   function testFlashLoanGoodFeeExcluded() public {
     mintVaultTokens(1);
     // set flashLoanFee to 100 (1%)
-    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 100);
+    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 100, 0);
 
     FlashBorrower flashBorrower = new FlashBorrower(address(vault));
     vaultManager.setFeeExclusion(address(flashBorrower), true);
@@ -574,7 +580,7 @@ contract FNFTCollectionTest is DSTest, SetupEnvironment {
   function testFlashLoanBad() public {
     mintVaultTokens(1);
     // set flashLoanFee to 100 (1%)
-    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 100);
+    fnftCollectionFactory.setFactoryFees(0.1 ether, 0.05 ether, 0.1 ether, 0.05 ether, 0.1 ether, 100, 0);
 
     FlashBorrower flashBorrower = new FlashBorrower(address(vault));
     vault.transfer(address(flashBorrower), 0.01 ether); // for fees

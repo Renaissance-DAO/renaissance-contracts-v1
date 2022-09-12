@@ -21,6 +21,9 @@ import "./interfaces/IPausable.sol";
 import "./interfaces/IVaultManager.sol";
 import "./token/ERC20FlashMintUpgradeable.sol";
 
+import {console} from "../test/utils/utils.sol";
+
+
 // Authors: @0xKiwi_ and @alexgausman.
 
 contract FNFTCollection is
@@ -165,7 +168,7 @@ contract FNFTCollection is
         _burn(msg.sender, BASE * amount);
 
         // Pay the tokens + toll.
-        (,, uint256 _targetRedeemFee,,) = vaultFees();
+        (,, uint256 _targetRedeemFee,,,) = vaultFees();
         uint256 totalFee = _targetRedeemFee * amount;
         _chargeAndDistributeFees(msg.sender, totalFee);
 
@@ -251,7 +254,7 @@ contract FNFTCollection is
     }
 
     function mintFee() public view override virtual returns (uint256) {
-        (uint256 _mintFee, , , ,) = factory.vaultFees(vaultId);
+        (uint256 _mintFee, , , , ,) = factory.vaultFees(vaultId);
         return _mintFee;
     }
 
@@ -275,12 +278,12 @@ contract FNFTCollection is
     }
 
     function randomRedeemFee() public view override virtual returns (uint256) {
-        (, uint256 _randomRedeemFee, , ,) = factory.vaultFees(vaultId);
+        (, uint256 _randomRedeemFee, , , ,) = factory.vaultFees(vaultId);
         return _randomRedeemFee;
     }
 
     function randomSwapFee() public view override virtual returns (uint256) {
-        (, , , uint256 _randomSwapFee, ) = factory.vaultFees(vaultId);
+        (, , , uint256 _randomSwapFee, ,) = factory.vaultFees(vaultId);
         return _randomSwapFee;
     }
 
@@ -300,7 +303,7 @@ contract FNFTCollection is
         _burn(msg.sender, BASE * amount);
 
         // Pay the tokens + toll.
-        (, uint256 _randomRedeemFee, uint256 _targetRedeemFee, ,) = vaultFees();
+        (, uint256 _randomRedeemFee, uint256 _targetRedeemFee, , ,) = vaultFees();
         uint256 totalFee = (_targetRedeemFee * specificIds.length) + (
             _randomRedeemFee * (amount - specificIds.length)
         );
@@ -317,10 +320,11 @@ contract FNFTCollection is
         uint256 _randomRedeemFee,
         uint256 _targetRedeemFee,
         uint256 _randomSwapFee,
-        uint256 _targetSwapFee
+        uint256 _targetSwapFee,
+        uint256 _bidFee
     ) public override virtual {
         _onlyPrivileged();
-        factory.setVaultFees(vaultId, _mintFee, _randomRedeemFee, _targetRedeemFee, _randomSwapFee, _targetSwapFee);
+        factory.setVaultFees(vaultId, _mintFee, _randomRedeemFee, _targetRedeemFee, _randomSwapFee, _targetSwapFee, _bidFee);
     }
 
     // The curator has control over options like fees and features
@@ -410,7 +414,7 @@ contract FNFTCollection is
         if (count != specificIds.length && !enableRandomSwap) revert RandomSwapDisabled();
         if (specificIds.length != 0 && !enableTargetSwap) revert TargetSwapDisabled();
 
-        (, , ,uint256 _randomSwapFee, uint256 _targetSwapFee) = vaultFees();
+        (, , ,uint256 _randomSwapFee, uint256 _targetSwapFee, ) = vaultFees();
         uint256 totalFee = (_targetSwapFee * specificIds.length) + (
             _randomSwapFee * (count - specificIds.length)
         );
@@ -425,46 +429,51 @@ contract FNFTCollection is
         return ids;
     }
 
-    function startAuction(uint256 tokenId, uint256 price) external override {
+    function startAuction(uint256 tokenId) external payable override {
         _onlyOwnerIfPaused(4);
         if (!enableBid || is1155) revert BidDisabled();
         if (auctions[tokenId].state != AuctionState.Inactive) revert AuctionLive();
-        if (price < BASE) revert BidTooLow();
 
-        _burn(msg.sender, price);
+        _burn(msg.sender, BASE);
 
         auctions[tokenId] = Auction({
-            livePrice: price,
+            livePrice: msg.value,
             end: block.timestamp + auctionLength,
             state: AuctionState.Live,
             winning: msg.sender
         });
 
-        emit AuctionStarted(msg.sender, tokenId, price);
+        (, , , , , uint256 _bidFee) = vaultFees();
+        _chargeAndDistributeFees(msg.sender, _bidFee);
+
+        emit AuctionStarted(msg.sender, tokenId, msg.value);
     }
 
-    function bid(uint256 tokenId, uint256 price) external override {
+    function bid(uint256 tokenId) external payable override {
         _onlyOwnerIfPaused(4);
         if (!enableBid || is1155) revert BidDisabled();
         if (auctions[tokenId].state != AuctionState.Live) revert AuctionNotLive();
         uint256 livePrice = auctions[tokenId].livePrice;
         uint256 increase = factory.minBidIncrease() + 10000;
-        if (price * 10000 < livePrice * increase) revert BidTooLow();
+        if (msg.value * 10000 <= livePrice * increase) revert BidTooLow();
 
         uint256 auctionEnd = auctions[tokenId].end;
         if (block.timestamp >= auctionEnd) revert AuctionEnded();
 
-        _burn(msg.sender, price);
-        _mint(auctions[tokenId].winning, livePrice);
+        _burn(msg.sender, BASE);
+        _mint(auctions[tokenId].winning, BASE);
 
-        auctions[tokenId].livePrice = price;
+        (, , , , , uint256 _bidFee) = vaultFees();
+        _chargeAndDistributeFees(msg.sender, _bidFee);
+
+        auctions[tokenId].livePrice = msg.value;
         auctions[tokenId].winning = msg.sender;
 
         if (auctionEnd - block.timestamp <= 15 minutes) {
             auctions[tokenId].end += 15 minutes;
         }
 
-        emit BidMade(msg.sender, tokenId, price);
+        emit BidMade(msg.sender, tokenId, msg.value);
     }
 
     function endAuction(uint256 tokenId) external override {
@@ -481,8 +490,7 @@ contract FNFTCollection is
         auctions[tokenId].state = AuctionState.Inactive;
         auctions[tokenId].winning = address(0);
 
-        uint256 premium = price - BASE;
-        if (premium > 0) _mint(depositors[tokenId], premium);
+        if (price > 0) _safeTransferETH(depositors[tokenId], price);
 
         uint256[] memory withdrawTokenIds = new uint256[](1);
         withdrawTokenIds[0] = tokenId;
@@ -509,16 +517,16 @@ contract FNFTCollection is
     }
 
     function targetRedeemFee() public view override virtual returns (uint256) {
-        (, , uint256 _targetRedeemFee, ,) = factory.vaultFees(vaultId);
+        (, , uint256 _targetRedeemFee, , ,) = factory.vaultFees(vaultId);
         return _targetRedeemFee;
     }
 
     function targetSwapFee() public view override virtual returns (uint256) {
-        (, , , ,uint256 _targetSwapFee) = factory.vaultFees(vaultId);
+        (, , , ,uint256 _targetSwapFee,) = factory.vaultFees(vaultId);
         return _targetSwapFee;
     }
 
-    function vaultFees() public view override virtual returns (uint256, uint256, uint256, uint256, uint256) {
+    function vaultFees() public view override virtual returns (uint256, uint256, uint256, uint256, uint256, uint256) {
         return factory.vaultFees(vaultId);
     }
 
@@ -629,6 +637,15 @@ contract FNFTCollection is
         } else {
             if (msg.sender != curator) revert NotCurator();
         }
+    }
+
+    /** @notice transfer ETH using call
+    *   @param _to: address to transfer ETH to
+    *   @param _value: amount of ETH to transfer
+    */
+    function _safeTransferETH(address _to, uint256 _value) private {
+        (bool success, ) = _to.call{value: _value}(new bytes(0));
+        if (!success) revert TxFailed();
     }
 
     function _transferERC721(address assetAddr, address to, uint256 tokenId) internal virtual {

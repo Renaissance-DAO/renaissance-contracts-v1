@@ -13,6 +13,7 @@ interface IFNFTCollectionFactory is IBeacon {
       uint64 targetRedeemFee;
       uint64 randomSwapFee;
       uint64 targetSwapFee;
+      uint64 bidFee;
   }
 
   // Read functions.
@@ -30,7 +31,9 @@ interface IFNFTCollectionFactory is IBeacon {
 
   function factoryTargetSwapFee() external view returns (uint64);
 
-  function vaultFees(uint256 vaultId) external view returns (uint256, uint256, uint256, uint256, uint256);
+  function factoryBidFee() external view returns (uint64);
+
+  function vaultFees(uint256 vaultId) external view returns (uint256, uint256, uint256, uint256, uint256, uint256);
 
   function flashLoanFee() external view returns (uint256);
 
@@ -59,6 +62,7 @@ interface IFNFTCollectionFactory is IBeacon {
     uint256 _factoryTargetRedeemFee,
     uint256 _factoryRandomSwapFee,
     uint256 _factoryTargetSwapFee,
+    uint256 _factoryBidFee,
     uint256 _flashLoanFee
   ) external;
 
@@ -74,6 +78,7 @@ interface IFNFTCollectionFactory is IBeacon {
       uint256 _randomRedeemFee,
       uint256 _targetRedeemFee,
       uint256 _randomSwapFee,
+      uint256 _bidFee,
       uint256 _targetSwapFee
   ) external;
 
@@ -82,9 +87,9 @@ interface IFNFTCollectionFactory is IBeacon {
   event FactoryThresholdsUpdated(uint256 maxAuctionLength, uint256 minAuctionLength, uint256 minBidIncrease);
   event EligibilityManagerUpdated(address oldEligManager, address newEligManager);
   event VaultCreated(uint256 indexed vaultId, address curator, address vaultAddress, address assetAddress, string name, string symbol);
-  event VaultFeesUpdated(uint256 vaultId, uint256 mintFee, uint256 randomRedeemFee, uint256 targetRedeemFee, uint256 randomSwapFee, uint256 targetSwapFee);
+  event VaultFeesUpdated(uint256 vaultId, uint256 mintFee, uint256 randomRedeemFee, uint256 targetRedeemFee, uint256 randomSwapFee, uint256 targetSwapFee, uint256 bidFee);
   event VaultFeesDisabled(uint256 vaultId);
-  event FactoryFeesUpdated(uint256 mintFee, uint256 randomRedeemFee, uint256 targetRedeemFee, uint256 randomSwapFee, uint256 targetSwapFee, uint256 flashLoanFee);
+  event FactoryFeesUpdated(uint256 mintFee, uint256 randomRedeemFee, uint256 targetRedeemFee, uint256 randomSwapFee, uint256 targetSwapFee, uint256 bidFee, uint256 flashLoanFee);
 
   error NotVault();
   error FeeTooHigh();
