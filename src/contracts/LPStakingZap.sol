@@ -39,10 +39,6 @@ contract LPStakingZap is ILPStakingZap, Ownable, ReentrancyGuard {
     lpStaking = ILPStaking(feeDistributor.lpStaking());
   }
 
-  receive() external payable {
-    if (msg.sender != address(WETH)) revert OnlyWETH();
-  }
-
   function rescue(address token) external override onlyOwner {
     if (token == address(0)) {
       (bool success, ) = payable(msg.sender).call{value: address(this).balance}("");
@@ -100,8 +96,11 @@ contract LPStakingZap is ILPStakingZap, Ownable, ReentrancyGuard {
 
     address vault = _vaultManager.vault(vaultId);
 
-    lpStaking.claimRewardsTo(vaultId, to);
-    lpStaking.withdrawTo(vaultId, amount, address(this));
+    lpStaking.withdrawOnBehalfOf(vaultId, amount, to, address(this));
+
+    // Consider just approving type(uint256).max once
+    address lpToken = _pairFor(vault, address(WETH));
+    IERC20Upgradeable(lpToken).approve(address(router), amount);
 
     (uint256 amountToken, uint256 amountEth) = router.removeLiquidityETH(
       vault,
@@ -128,8 +127,11 @@ contract LPStakingZap is ILPStakingZap, Ownable, ReentrancyGuard {
 
     address vault = _vaultManager.vault(vaultId);
 
-    lpStaking.claimRewardsTo(vaultId, to);
-    lpStaking.withdrawTo(vaultId, amount, address(this));
+    lpStaking.withdrawOnBehalfOf(vaultId, amount, to, address(this));
+
+    // Consider just approving type(uint256).max once
+    address lpToken = _pairFor(vault, address(WETH));
+    IERC20Upgradeable(lpToken).approve(address(router), amount);
 
     (uint256 amountToken, uint256 amountWeth) = router.removeLiquidity(
       vault,
@@ -154,6 +156,7 @@ contract LPStakingZap is ILPStakingZap, Ownable, ReentrancyGuard {
 	) internal returns (uint256, uint256, uint256) {
 		if (!vaultManager.excludedFromFees(address(this))) revert NotExcluded();
 
+    IERC20Upgradeable(vault).safeTransferFrom(msg.sender, address(this), minTokenIn);
 		// Provide liquidity.
     IERC20Upgradeable(vault).safeApprove(address(router), minTokenIn);
 
@@ -173,7 +176,7 @@ contract LPStakingZap is ILPStakingZap, Ownable, ReentrancyGuard {
     IERC20Upgradeable(lpToken).safeApprove(address(lpStaking), liquidity);
     lpStaking.timelockDepositFor(vaultId, to, liquidity, lpLockTime);
 
-		uint256 remaining = minTokenIn-amountToken;
+		uint256 remaining = minTokenIn - amountToken;
     if (remaining != 0) {
       IERC20Upgradeable(vault).safeTransfer(to, remaining);
     }

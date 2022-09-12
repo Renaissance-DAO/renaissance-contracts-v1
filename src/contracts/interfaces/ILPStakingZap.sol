@@ -64,6 +64,5 @@ interface ILPStakingZap {
     error LockTooLong();
     error NotExcluded();
     error NotZeroAddress();
-    error OnlyWETH();
     error ZeroAddress();
 }

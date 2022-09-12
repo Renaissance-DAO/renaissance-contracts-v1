@@ -130,6 +130,14 @@ contract SetupEnvironment {
         setupWETH(_wethAmount);
     }
 
+    function setupForkedEnvironment(uint256 _wethAmount) public {
+        vm = CheatCodes(address(bytes20(uint160(uint256(keccak256("hevm cheat code"))))));
+        setupDeployerAndProxyController();
+        weth = WETH(0xC9BdeEd33CD01541e1eeD10f90519d2C06Fe3feB);
+        vm.deal(msg.sender, _wethAmount);
+        weth.deposit{value: _wethAmount}();
+    }
+
     function setupContracts()
         public
         returns (

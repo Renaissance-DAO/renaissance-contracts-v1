@@ -205,6 +205,21 @@ contract LPStaking is ILPStaking, Pausable {
         emit XTokenWithdrawn(vaultId, amount, address(xToken(pool)), to);
     }
 
+    // NOTE: This should be tested if we decide to go with it.
+    function withdrawOnBehalfOf(uint256 vaultId, uint256 amount, address onBehalfOf, address to) external override {
+        if (!vaultManager.excludedFromFees(msg.sender)) revert NotExcludedFromFees();
+
+        StakingPool memory pool = vaultStakingInfo[vaultId];
+        if (pool.stakingToken == address(0)) revert PoolDoesNotExist();
+
+        _claimRewards(pool, onBehalfOf);
+
+        xToken(pool).burnFrom(onBehalfOf, amount);
+        IERC20Upgradeable(pool.stakingToken).safeTransfer(to, amount);
+
+        emit XTokenWithdrawn(vaultId, amount, address(xToken(pool)), to);
+    }
+
     function balanceOf(uint256 vaultId, address addr) public view override returns (uint256) {
         StakingPool memory pool = vaultStakingInfo[vaultId];
         LPStakingXTokenUpgradeable _xToken = xToken(pool);
